@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galactic Defender</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="gameWrapper">
+  <canvas id="c" width="480" height="640"></canvas>
+
+  <div id="ui">
+    <!-- Top HUD -->
+    <div id="topBar">
+      <div class="stat-block">
+        <div class="stat-label">Score</div>
+        <div class="stat-value" id="scoreVal">0</div>
+      </div>
+      <div class="stat-block" style="align-items:center">
+        <div class="stat-label">Wave</div>
+        <div class="stat-value" id="waveVal">1</div>
+      </div>
+      <div class="stat-block" style="align-items:flex-end">
+        <div class="stat-label">Lives</div>
+        <div id="livesDisplay">
+          <div class="life-icon" id="l0"></div>
+          <div class="life-icon" id="l1"></div>
+          <div class="life-icon" id="l2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Speed indicator -->
+    <div id="speedTag">SPEED x<span id="speedVal">1.0</span></div>
+
+    <!-- Enemy type legend -->
+    <div id="enemyLegend">
+      <span class="leg-item"><span class="leg-dot" style="background:#4af"></span>Basic</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#f84"></span>Fast</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#a4f"></span>Tank</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#0f8"></span>Healer</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#ff0"></span>Bomber</span>
+      <span class="leg-item"><span class="leg-dot" style="background:#f0f"></span>Stealth</span>
+    </div>
+
+    <!-- Boss HP bar -->
+    <div id="bossBar">
+      <div id="bossName">⚠ BOSS</div>
+      <div id="bossTrack"><div id="bossHealth" style="width:100%"></div></div>
+      <div id="bossPhaseLabel">PHASE 1</div>
+    </div>
+
+    <!-- Wave announce -->
+    <div id="waveAnnounce">
+      <div id="waveText">WAVE</div>
+      <div id="waveNum">1</div>
+      <div id="waveSpeed"></div>
+    </div>
+
+    <!-- Combo display -->
+    <div id="comboDisplay">x2 COMBO!</div>
+
+    <!-- Score popups container -->
+    <div id="scorePopups"></div>
+
+    <!-- Power bomb bar -->
+    <div id="powerBar">
+      <div id="powerLabel">POWER CHARGE</div>
+      <div id="powerTrack"><div id="powerFill"></div></div>
+    </div>
+  </div><!-- /ui -->
+
+  <!-- Start / Game Over overlay -->
+  <div id="overlay">
+    <div id="overlayTitle">GALACTIC<br>DEFENDER</div>
+    <div id="overlaySubtitle">PROTECT THE GALAXY</div>
+    <div class="overlay-stat" id="finalScore" style="display:none">SCORE <span id="fsVal">0</span></div>
+    <div class="overlay-stat" id="finalWave"  style="display:none">REACHED WAVE <span id="fwVal">1</span></div>
+    <div class="overlay-stat" id="highScore"  style="display:none">BEST <span id="hsVal">0</span></div>
+    <button id="startBtn">LAUNCH</button>
+    <div id="controls">
+      MOVE ← → ↑ ↓ &nbsp;|&nbsp; SHOOT SPACE / Z<br>
+      POWER BOMB P &nbsp;|&nbsp; MOUSE AIM + CLICK<br>
+      <span style="color:#4af">NEW:</span> Healer revives · Bomber explodes · Stealth fades
+    </div>
+  </div>
+</div><!-- /gameWrapper -->
+
+<script src="game.js"></script>
+</body>
+</html>

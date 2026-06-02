@@ -1,0 +1,319 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+/* ── Reset ─────────────────────────────────────────── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  font-family: 'Share Tech Mono', monospace;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ── Game wrapper & canvas ──────────────────────────── */
+#gameWrapper {
+  position: relative;
+  width: 480px;
+  height: 640px;
+}
+
+canvas {
+  display: block;
+  width: 480px;
+  height: 640px;
+  image-rendering: pixelated;
+}
+
+/* ── UI layer ───────────────────────────────────────── */
+#ui {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+}
+
+/* ── Top HUD bar ────────────────────────────────────── */
+#topBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 14px 18px 0;
+}
+
+.stat-block { display: flex; flex-direction: column; gap: 2px; }
+
+.stat-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #4af;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  font-family: 'Orbitron', monospace;
+  text-shadow: 0 0 12px #4af;
+}
+
+/* Lives icons */
+#livesDisplay { display: flex; gap: 5px; align-items: center; margin-top: 2px; }
+.life-icon {
+  width: 14px; height: 14px;
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  background: #0f9;
+  transition: opacity 0.3s;
+}
+.life-icon.dead { opacity: 0.15; }
+
+/* ── Speed Tag ──────────────────────────────────────── */
+#speedTag {
+  position: absolute;
+  top: 14px; left: 50%;
+  transform: translateX(-50%);
+  margin-top: 42px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #fa0;
+  text-shadow: 0 0 8px #fa0;
+  white-space: nowrap;
+}
+
+/* ── Enemy type legend ──────────────────────────────── */
+#enemyLegend {
+  position: absolute;
+  top: 76px; left: 18px;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.leg-item {
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: #667;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.leg-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Boss HP bar ────────────────────────────────────── */
+#bossBar {
+  position: absolute;
+  top: 100px; left: 18px; right: 18px;
+  display: none;
+}
+#bossName {
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: #f44;
+  margin-bottom: 4px;
+  text-shadow: 0 0 8px #f44;
+}
+#bossTrack {
+  height: 8px;
+  background: rgba(255,255,255,0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 0.5px solid rgba(255,80,80,0.4);
+}
+#bossHealth {
+  height: 100%;
+  background: linear-gradient(90deg, #f44, #f80);
+  border-radius: 4px;
+  transition: width 0.1s;
+  box-shadow: 0 0 10px #f44;
+}
+#bossPhaseLabel {
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #f88;
+  margin-top: 3px;
+  text-align: right;
+}
+
+/* ── Power bomb bar ─────────────────────────────────── */
+#powerBar {
+  position: absolute;
+  bottom: 18px; left: 18px; right: 18px;
+}
+#powerLabel {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: #fa0;
+  margin-bottom: 4px;
+}
+#powerTrack {
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  overflow: hidden;
+  border: 0.5px solid rgba(255,160,0,0.3);
+}
+#powerFill {
+  height: 100%;
+  background: linear-gradient(90deg, #f80, #ff0);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 0.15s;
+  box-shadow: 0 0 6px #fa0;
+}
+
+/* ── Wave announcement ──────────────────────────────── */
+#waveAnnounce {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+#waveAnnounce.show { opacity: 1; }
+
+#waveText {
+  font-family: 'Orbitron', monospace;
+  font-size: 13px;
+  letter-spacing: 6px;
+  color: #4af;
+  text-shadow: 0 0 20px #4af;
+  margin-bottom: 6px;
+}
+#waveNum {
+  font-family: 'Orbitron', monospace;
+  font-size: 48px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 30px #4af, 0 0 60px #4af;
+}
+#waveSpeed {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: #fa0;
+  margin-top: 6px;
+  text-shadow: 0 0 10px #fa0;
+}
+
+/* ── Combo display ──────────────────────────────────── */
+#comboDisplay {
+  position: absolute;
+  top: 110px; left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Orbitron', monospace;
+  font-size: 22px;
+  font-weight: 900;
+  color: #ff0;
+  text-shadow: 0 0 20px #ff0;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  white-space: nowrap;
+}
+#comboDisplay.show { opacity: 1; }
+
+/* ── Score popups ───────────────────────────────────── */
+#scorePopups {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.score-pop {
+  position: absolute;
+  font-family: 'Orbitron', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  pointer-events: none;
+  animation: floatUp 0.9s ease-out forwards;
+}
+@keyframes floatUp {
+  0%   { opacity: 1; transform: translateY(0) scale(1); }
+  100% { opacity: 0; transform: translateY(-55px) scale(0.7); }
+}
+
+/* ── Overlay (menu / game-over) ─────────────────────── */
+#overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,4,12,0.92);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+}
+#overlay.hidden { display: none; }
+
+#overlayTitle {
+  font-family: 'Orbitron', monospace;
+  font-size: 36px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 0 0 30px #4af, 0 0 60px #4af;
+  letter-spacing: 4px;
+  margin-bottom: 6px;
+  text-align: center;
+  line-height: 1.2;
+}
+#overlaySubtitle {
+  font-size: 11px;
+  letter-spacing: 4px;
+  color: #4af;
+  margin-bottom: 36px;
+  text-align: center;
+}
+
+.overlay-stat {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: #88c;
+  margin-bottom: 8px;
+  text-align: center;
+}
+.overlay-stat span { color: #fff; }
+
+#startBtn {
+  margin-top: 28px;
+  padding: 14px 44px;
+  background: transparent;
+  border: 1.5px solid #4af;
+  color: #4af;
+  font-family: 'Orbitron', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+  text-shadow: 0 0 10px #4af;
+  box-shadow: 0 0 20px rgba(68,170,255,0.2), inset 0 0 20px rgba(68,170,255,0.05);
+}
+#startBtn:hover {
+  background: rgba(68,170,255,0.15);
+  box-shadow: 0 0 30px rgba(68,170,255,0.4), inset 0 0 30px rgba(68,170,255,0.1);
+  transform: scale(1.03);
+}
+
+#controls {
+  margin-top: 22px;
+  font-size: 10px;
+  color: #446;
+  letter-spacing: 1px;
+  text-align: center;
+  line-height: 2.2;
+}
+
+/* ── Responsive / mobile ────────────────────────────── */
+@media (max-width: 520px) {
+  #gameWrapper { width: 100vw; height: 100vh; }
+  canvas { width: 100vw; height: 100vh; }
+  #enemyLegend { display: none; }
+}
